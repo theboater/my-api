@@ -74,6 +74,17 @@ app.post('/users', async (req, res) => {
   }
 })
 
+app.get('/check-db', async (req, res) => {
+  try {
+    const result = await pool_mydb.query(
+      "SELECT current_database(), current_user, inet_server_addr();"
+    )
+    res.json(result.rows[0])
+  } catch (err) {
+    res.status(500).json({ error: err.message })
+  }
+})
+
 // Render 會自動給 PORT
 const PORT = process.env.PORT || 10000
 
