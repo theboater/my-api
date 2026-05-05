@@ -17,26 +17,31 @@ const pool_accident = new Pool({
   connectionString: process.env.DATABASE_URL_ACCIDENT
 })
 
-// 測試用 route
+// 測試用
 app.get('/', (req, res) => {
   res.send('API is running')
 })
 
+// accidents
 app.get('/accidents', async (req, res) => {
   try {
-    const result = await pool_accident.query("select * from highway_accident_high_risk.table1_11301_11312 where city = '彰化縣'")
+    const result = await pool_accident.query(
+      "select * from highway_accident_high_risk.table1_11301_11312 where city = '彰化縣'"
+    )
     res.json(result.rows)
   } catch (err) {
+    console.error(err)
     res.status(500).json({ error: err.message })
   }
 })
 
-// 取得 users
+// users
 app.get('/users', async (req, res) => {
   try {
     const result = await pool_mydb.query('SELECT * FROM users')
     res.json(result.rows)
   } catch (err) {
+    console.error(err)
     res.status(500).json({ error: err.message })
   }
 })
@@ -51,10 +56,14 @@ app.post('/users', async (req, res) => {
     )
     res.json(result.rows[0])
   } catch (err) {
+    console.error(err)
     res.status(500).json({ error: err.message })
   }
 })
 
-app.listen(3000, () => {
-  console.log('Server running on http://localhost:3000')
+// ✅ Render 必備
+const PORT = process.env.PORT || 3000
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`)
 })
