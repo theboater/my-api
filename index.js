@@ -39,7 +39,7 @@ app.get('/', (req, res) => {
 app.get('/accidents', async (req, res) => {
   try {
     const result = await pool_accident.query(
-      "select * from highway_accident_high_risk.table1_11301_11312 where city = '彰化縣'"
+      "select * from accident.table1_11301_11312_changhua_caseid"
     )
     res.json(result.rows)
   } catch (err) {
@@ -96,7 +96,7 @@ app.get('/check-db', async (req, res) => {
     )
     // 新增：列出目前資料庫所有的資料表
     const tables = await pool_mydb.query(
-      "SELECT table_name FROM information_schema.tables WHERE table_schema = 'public';"
+      "SELECT table_name FROM information_schema.tables;"
     )
     
     res.json({
