@@ -48,6 +48,21 @@ app.get('/accidents', async (req, res) => {
   }
 })
 
+app.get('/init-db', async (req, res) => {
+  try {
+    await pool_mydb.query(`
+      CREATE TABLE IF NOT EXISTS users (
+        id SERIAL PRIMARY KEY,
+        name TEXT,
+        email TEXT
+      );
+    `);
+    res.send('✅ 資料表建立成功！');
+  } catch (err) {
+    res.status(500).send('❌ 失敗：' + err.message);
+  }
+});
+
 // users
 app.get('/users', async (req, res) => {
   try {
