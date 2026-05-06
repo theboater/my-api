@@ -76,10 +76,18 @@ app.post('/users', async (req, res) => {
 
 app.get('/check-db', async (req, res) => {
   try {
-    const result = await pool_mydb.query(
+    const dbInfo = await pool_mydb.query(
       "SELECT current_database(), current_user, inet_server_addr();"
     )
-    res.json(result.rows[0])
+    // 新增：列出目前資料庫所有的資料表
+    const tables = await pool_mydb.query(
+      "SELECT table_name FROM information_schema.tables WHERE table_schema = 'public';"
+    )
+    
+    res.json({
+      connection: dbInfo.rows[0],
+      tables: tables.rows.map(t => t.table_name)
+    })
   } catch (err) {
     res.status(500).json({ error: err.message })
   }
